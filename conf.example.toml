@@ -1,0 +1,69 @@
+﻿# BEpusdt example config for Hugging Face + Cloudflare
+# Copy this file to conf.toml if your deployment uses a config file.
+# Do not commit real tokens, Telegram bot token, or private wallet keys.
+
+# Public URL exposed by Cloudflare Worker / Cloudflare DNS.
+# This is the URL your payment plugin and users should use.
+app_uri = "https://lcybepusdt.ccwu.cc"
+
+# API auth token. Use a long random string.
+# Epusdt-compatible plugins usually use this as the merchant/auth token.
+auth_token = "CHANGE_ME_LONG_RANDOM_AUTH_TOKEN"
+
+# Hugging Face Docker Space should expose port 8080.
+listen = ":8080"
+
+# Runtime files. On Hugging Face, /tmp is writable but not persistent.
+# If you enable persistent storage, change these to /data/bepusdt/...
+output_log = "/tmp/bepusdt/bepusdt.log"
+sqlite_path = "/tmp/bepusdt/sqlite.db"
+
+# If your BEpusdt build supports PostgreSQL, prefer setting this as an
+# environment variable on Hugging Face instead of hardcoding it here:
+# POSTGRESQL_DSN=postgresql://USER:PASSWORD@HOST:5432/postgres?sslmode=require
+# postgresql_dsn = "postgresql://USER:PASSWORD@HOST:5432/postgres?sslmode=require"
+
+[pay]
+# Exchange-rate multiplier.
+# "~1" means use live rate with no discount; "~0.98" means 2% discount.
+usdt_rate = "~1"
+usdc_rate = "~1"
+trx_rate = "~1"
+
+# Order expiration time in seconds. 1800 = 30 minutes.
+expire_time = 1800
+
+# Optional precision / incremental payment settings.
+# Keep commented unless you know the exact keys supported by your BEpusdt version.
+# precision = 2
+# amount_step = 0.01
+
+# Wallet receiving addresses.
+# Format: "trade_type:address"
+# Common trade types include:
+# - tron.trx
+# - usdt.trc20
+# - usdt.erc20
+# - usdt.bep20
+# - usdt.polygon
+wallet_address = [
+    "usdt.trc20:T_REPLACE_WITH_YOUR_TRC20_USDT_ADDRESS",
+]
+
+[bot]
+# Telegram admin numeric ID. Get it from @userinfobot or @QueryCoinBot.
+# If your BEpusdt version requires Telegram, these two fields must be valid.
+admin_id = 123456789
+
+# Telegram bot token from @BotFather.
+token = "CHANGE_ME_TELEGRAM_BOT_TOKEN"
+
+# Optional notification settings. Keep commented unless supported by your version.
+# enable = true
+# notify_start = true
+# notify_order = true
+
+[webhook]
+# Optional event webhook. Leave empty if unused.
+# url = "https://example.com/webhook/bepusdt"
+# secret = "CHANGE_ME_WEBHOOK_SECRET"
